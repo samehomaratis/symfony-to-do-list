@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\TasksModel;
+use App\Form\TaskType;
 use App\Repository\TasksModelRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -39,7 +40,7 @@ final class ToDoListController extends AbstractController
         TasksModelRepository $tasksRepository
     ): Response {
         $task = new TasksModel();
-        $form = $this->createForm('create_task', $task);
+        $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
