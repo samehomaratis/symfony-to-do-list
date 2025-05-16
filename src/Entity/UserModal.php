@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserModalRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(name: 'users')]
 #[ORM\Entity(repositoryClass: UserModalRepository::class)]
 class UserModal
 {

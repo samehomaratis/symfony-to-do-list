@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TasksModelRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(name: 'tasks')]
 #[ORM\Entity(repositoryClass: TasksModelRepository::class)]
 class TasksModel
 {

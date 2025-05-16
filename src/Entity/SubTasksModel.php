@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SubTasksModelRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(name: 'subtasks ')]
 #[ORM\Entity(repositoryClass: SubTasksModelRepository::class)]
 class SubTasksModel
 {
