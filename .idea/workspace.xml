@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="17de4b8e-fe91-4298-ae12-f5f2fe52c837" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/public/css/login.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/css/register.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/LoginController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/UserModal.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/UserModal.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login/index.html.twig" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +173,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "F:/laragon/www/symfony-to-do-list/templates/to_do_list",
+    "last_opened_file_path": "F:/laragon/www/symfony-to-do-list/public/css",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -190,6 +186,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\laragon\www\symfony-to-do-list\public\css" />
       <recent name="F:\laragon\www\symfony-to-do-list\templates\to_do_list" />
     </key>
   </component>
@@ -218,7 +215,7 @@
       <option name="presentableId" value="Default" />
       <updated>1747316840513</updated>
       <workItem from="1747316842400" duration="5126000" />
-      <workItem from="1747381675022" duration="16232000" />
+      <workItem from="1747381675022" duration="19070000" />
     </task>
     <servers />
   </component>
