@@ -4,10 +4,12 @@ namespace App\Entity;
 
 use App\Repository\UserModalRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Table(name: 'users')]
 #[ORM\Entity(repositoryClass: UserModalRepository::class)]
-class UserModal
+class UserModal implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -62,5 +64,20 @@ class UserModal
         $this->password = $password;
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return [];
+    }
+
+    public function eraseCredentials(): void
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return '';
     }
 }

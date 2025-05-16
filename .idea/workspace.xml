@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="17de4b8e-fe91-4298-ae12-f5f2fe52c837" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Form/TaskType.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/css/login.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ToDoListController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ToDoListController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/to_do_list/create.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/to_do_list/create.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/LoginController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/UserModal.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/UserModal.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/login/index.html.twig" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,6 +183,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "php.override.implement.member.chooser.php.doc": "NONE",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
@@ -215,11 +218,22 @@
       <option name="presentableId" value="Default" />
       <updated>1747316840513</updated>
       <workItem from="1747316842400" duration="5126000" />
-      <workItem from="1747381675022" duration="14129000" />
+      <workItem from="1747381675022" duration="16232000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php</url>
+          <line>4</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
