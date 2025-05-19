@@ -68,7 +68,10 @@ class UserModal implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        return [];
+        // guarantee every user has at least ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
     public function eraseCredentials(): void

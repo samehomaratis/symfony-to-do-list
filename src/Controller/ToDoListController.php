@@ -11,9 +11,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class ToDoListController extends AbstractController
 {
+    #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list', name: 'web_tasks')]
     public function index(
         TasksModelRepository $tasksRepository,
@@ -33,6 +35,7 @@ final class ToDoListController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list/create', name: 'app_tasks_new')]
     public function create(
         Request $request,

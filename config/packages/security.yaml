@@ -24,6 +24,8 @@ security:
                 path: logout
                 target: /
 
+            security: true
+
             custom_authenticator: App\Security\LoginFormAuthenticator
             entry_point: App\Security\LoginFormAuthenticator
 

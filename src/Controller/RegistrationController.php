@@ -14,7 +14,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
+    public function register(Request $request,
+                             UserPasswordHasherInterface $passwordHasher,
+                             EntityManagerInterface $em): Response
     {
         $user = new UserModal();
         $form = $this->createForm(RegistrationFormTypeForm::class, $user);
@@ -31,7 +33,7 @@ class RegistrationController extends AbstractController
         }
 
         return $this->render('registration/index.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 }
