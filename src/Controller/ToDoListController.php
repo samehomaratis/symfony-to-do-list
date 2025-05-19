@@ -15,13 +15,18 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class ToDoListController extends AbstractController
 {
+    public function __construct(private EntityManagerInterface $entityManager) {
+
+    }
+
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list', name: 'web_tasks')]
     public function index(
         TasksModelRepository $tasksRepository,
-        PaginatorInterface $paginator,
-        Request $request
-    ): Response {
+        PaginatorInterface   $paginator,
+        Request              $request
+    ): Response
+    {
         $query = $tasksRepository->createQueryBuilder('t')->getQuery();
 
         $pagination = $paginator->paginate(
@@ -38,10 +43,10 @@ final class ToDoListController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list/create', name: 'app_tasks_new')]
     public function create(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        TasksModelRepository $tasksRepository
-    ): Response {
+        Request                $request,
+        TasksModelRepository   $tasksRepository
+    ): Response
+    {
         $task = new TasksModel();
         $form = $this->createForm(TaskType::class, $task);
 
@@ -52,8 +57,8 @@ final class ToDoListController extends AbstractController
             if ($existingTask) {
                 $this->addFlash('error', 'A task with this title already exists.');
             } else {
-                $entityManager->persist($task);
-                $entityManager->flush();
+                $this->entityManager->persist($task);
+                $this->entityManager->flush();
 
                 return $this->redirectToRoute('web_tasks');
             }
@@ -67,18 +72,23 @@ final class ToDoListController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list/edit/{id}', name: 'app_tasks_edit')]
     public function edit(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        TasksModelRepository $tasksRepository,
-        $id
-    ): Response {
+        Request                $request,
+        TasksModelRepository   $tasksRepository,
+                               $id
+    ): Response
+    {
         $task = $tasksRepository->find($id);
+
+        if (!$task) {
+            throw $this->createNotFoundException('Task not found');
+        }
+
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($task);
-            $entityManager->flush();
+            $this->entityManager->persist($task);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('web_tasks');
         }
@@ -90,31 +100,47 @@ final class ToDoListController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list/toggle/{id}', name: 'app_tasks_toggle')]
-    public function delete(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        TasksModelRepository $tasksRepository
-    ): Response {
-        $task = new TasksModel();
-        $form = $this->createForm(TaskType::class, $task);
+    public function markAsComplete(
+        Request                $request,
+        TasksModelRepository   $tasksRepository,
+                               $id
+    ): Response
+    {
+        $task = $tasksRepository->find($id);
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Example: Check for duplicate task titles
-            $existingTask = $tasksRepository->findOneBy(['title' => $task->getTitle()]);
-            if ($existingTask) {
-                $this->addFlash('error', 'A task with this title already exists.');
-            } else {
-                $entityManager->persist($task);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('web_tasks');
-            }
+        if (!$task) {
+            throw $this->createNotFoundException('Task not found');
         }
 
-        return $this->render('to_do_list/create.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        if ($task->getStatus() == 0 || $task->getStatus() == 1) {
+            $task->setStatus(2);
+        } else {
+            $task->setStatus(1);
+        }
+
+        $this->entityManager->persist($task);
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute('web_tasks');
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/to-do-list/delete/{id}', name: 'app_tasks_delete')]
+    public function delete(
+        Request                $request,
+        TasksModelRepository   $tasksRepository,
+                               $id
+    ): Response
+    {
+        $task = $tasksRepository->find($id);
+
+        if (!$task) {
+            throw $this->createNotFoundException('Task not found');
+        }
+
+        $this->entityManager->remove($task);
+        $this->entityManager->flush();
+        return $this->redirectToRoute('web_tasks');
     }
 }
 
