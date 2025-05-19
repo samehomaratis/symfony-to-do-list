@@ -6,12 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="17de4b8e-fe91-4298-ae12-f5f2fe52c837" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegistrationController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ToDoListController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ToDoListController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/UserModal.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/UserModal.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/RegistrationFormTypeForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/RegistrationFormTypeForm.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/registration/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Form/TaskType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/TaskType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/to_do_list/create.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/to_do_list/create.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/to_do_list/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/to_do_list/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -222,7 +220,7 @@
       <workItem from="1747316842400" duration="5126000" />
       <workItem from="1747381675022" duration="26315000" />
       <workItem from="1747640024053" duration="599000" />
-      <workItem from="1747641022060" duration="4459000" />
+      <workItem from="1747641022060" duration="20655000" />
     </task>
     <servers />
   </component>

@@ -63,4 +63,63 @@ final class ToDoListController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/to-do-list/edit/{id}', name: 'app_tasks_edit')]
+    public function edit(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        TasksModelRepository $tasksRepository,
+        $id
+    ): Response {
+        $task = $tasksRepository->find($id);
+        $form = $this->createForm(TaskType::class, $task);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($task);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('web_tasks');
+        }
+
+        return $this->render('to_do_list/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/to-do-list/toggle/{id}', name: 'app_tasks_toggle')]
+    public function delete(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        TasksModelRepository $tasksRepository
+    ): Response {
+        $task = new TasksModel();
+        $form = $this->createForm(TaskType::class, $task);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Example: Check for duplicate task titles
+            $existingTask = $tasksRepository->findOneBy(['title' => $task->getTitle()]);
+            if ($existingTask) {
+                $this->addFlash('error', 'A task with this title already exists.');
+            } else {
+                $entityManager->persist($task);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('web_tasks');
+            }
+        }
+
+        return $this->render('to_do_list/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 }
+
+
+
+
+
+

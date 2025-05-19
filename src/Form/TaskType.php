@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\TasksModel;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -14,11 +15,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TaskType extends AbstractType
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $this->security->getUser();
+        $userId = $user?->getId();
+
         $builder
             ->add('user_id', IntegerType::class, [
                 'label' => 'User ID',
+                'data' => $userId
             ])
             ->add('title', TextType::class, [
                 'label' => 'Title',
