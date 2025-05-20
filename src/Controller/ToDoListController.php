@@ -142,10 +142,5 @@ final class ToDoListController extends AbstractController
         $this->entityManager->flush();
         return $this->redirectToRoute('web_tasks');
     }
+
 }
-
-
-
-
-
-
