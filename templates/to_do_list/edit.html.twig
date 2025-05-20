@@ -2,6 +2,12 @@
 
 {% block title %}Edit Task{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="{{ asset('css/to-do-list.css') }}">
+{% endblock %}
+
 {% block body %}
     <div class="container mt-4">
         <h1>Edit Task</h1>
