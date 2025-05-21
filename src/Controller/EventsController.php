@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\TasksModel;
-use App\Form\TaskType;
+use App\Entity\Events;
+use App\Form\EventType;
 use App\Repository\EventsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -37,7 +37,7 @@ final class EventsController extends AbstractController
         );
 
         return $this->render('events/index.html.twig', [
-            'tasks' => $pagination,
+            'events' => $pagination,
         ]);
     }
 
@@ -47,12 +47,12 @@ final class EventsController extends AbstractController
         Request $request
     ): Response
     {
-        $task = new TasksModel();
-        $form = $this->createForm(TaskType::class, $task);
+        $model = new Events();
+        $form = $this->createForm(EventType::class, $model);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($task);
+            $this->entityManager->persist($model);
             $this->entityManager->flush();
 
             return $this->redirectToRoute('web_events');
@@ -70,17 +70,17 @@ final class EventsController extends AbstractController
                 $id
     ): Response
     {
-        $task = $this->eventsRepository->find($id);
+        $model = $this->eventsRepository->find($id);
 
-        if (!$task) {
+        if (!$model) {
             throw $this->createNotFoundException('Event not found');
         }
 
-        $form = $this->createForm(TaskType::class, $task);
+        $form = $this->createForm(EventType::class, $model);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($task);
+            $this->entityManager->persist($model);
             $this->entityManager->flush();
 
             return $this->redirectToRoute('web_events');
@@ -98,13 +98,13 @@ final class EventsController extends AbstractController
                 $id
     ): Response
     {
-        $task = $this->eventsRepository->find($id);
+        $model = $this->eventsRepository->find($id);
 
-        if (!$task) {
+        if (!$model) {
             throw $this->createNotFoundException('Event not found');
         }
 
-        $this->entityManager->remove($task);
+        $this->entityManager->remove($model);
         $this->entityManager->flush();
         return $this->redirectToRoute('web_events');
     }
