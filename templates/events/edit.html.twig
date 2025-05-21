@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Task{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="{{ asset('css/to-do-list.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Edit Task</h1>
+
+        <div class="mb-3">
+            {{ form_start(form) }}
+
+            <div class="mb-3">
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.title) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 4}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.due_date) }}
+                {{ form_widget(form.due_date, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.due_date) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.priority) }}
+                {{ form_widget(form.priority, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.priority) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.status) }}
+                {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.status) }}
+            </div>
+
+            <div class="mb-3 d-none">
+                {{ form_label(form.user_id) }}
+                {{ form_widget(form.user_id, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.user_id) }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update The Task</button>
+            {{ form_end(form) }}
+        </div>
+
+    </div>
+{% endblock %}

@@ -15,19 +15,20 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class ToDoListController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $entityManager) {
+    public function __construct(private EntityManagerInterface $entityManager,
+                                private TasksModelRepository   $tasksRepository)
+    {
 
     }
 
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list', name: 'web_tasks')]
     public function index(
-        TasksModelRepository $tasksRepository,
-        PaginatorInterface   $paginator,
-        Request              $request
+        PaginatorInterface $paginator,
+        Request            $request
     ): Response
     {
-        $query = $tasksRepository->createQueryBuilder('t')->getQuery();
+        $query = $this->tasksRepository->createQueryBuilder('t')->getQuery();
 
         $pagination = $paginator->paginate(
             $query, // Query to paginate
@@ -43,8 +44,7 @@ final class ToDoListController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list/create', name: 'app_tasks_new')]
     public function create(
-        Request                $request,
-        TasksModelRepository   $tasksRepository
+        Request              $request
     ): Response
     {
         $task = new TasksModel();
@@ -53,7 +53,7 @@ final class ToDoListController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Example: Check for duplicate task titles
-            $existingTask = $tasksRepository->findOneBy(['title' => $task->getTitle()]);
+            $existingTask = $this->tasksRepository->findOneBy(['title' => $task->getTitle()]);
             if ($existingTask) {
                 $this->addFlash('error', 'A task with this title already exists.');
             } else {
@@ -72,12 +72,11 @@ final class ToDoListController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list/edit/{id}', name: 'app_tasks_edit')]
     public function edit(
-        Request                $request,
-        TasksModelRepository   $tasksRepository,
-                               $id
+        Request              $request,
+                             $id
     ): Response
     {
-        $task = $tasksRepository->find($id);
+        $task = $this->tasksRepository->find($id);
 
         if (!$task) {
             throw $this->createNotFoundException('Task not found');
@@ -101,12 +100,11 @@ final class ToDoListController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list/toggle/{id}', name: 'app_tasks_toggle')]
     public function markAsComplete(
-        Request                $request,
-        TasksModelRepository   $tasksRepository,
-                               $id
+        Request              $request,
+                             $id
     ): Response
     {
-        $task = $tasksRepository->find($id);
+        $task = $this->tasksRepository->find($id);
 
         if (!$task) {
             throw $this->createNotFoundException('Task not found');
@@ -127,12 +125,11 @@ final class ToDoListController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list/delete/{id}', name: 'app_tasks_delete')]
     public function delete(
-        Request                $request,
-        TasksModelRepository   $tasksRepository,
-                               $id
+        Request              $request,
+                             $id
     ): Response
     {
-        $task = $tasksRepository->find($id);
+        $task = $this->tasksRepository->find($id);
 
         if (!$task) {
             throw $this->createNotFoundException('Task not found');

@@ -1,0 +1,92 @@
+{# templates/task/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}My Tasks{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="{{ asset('css/to-do-list.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container my-4">
+        <h1>My To-Do List</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 d-flex justify-content-end">
+                    <a href="{{ path('app_tasks_new') }}" class="btn btn-primary">Add New Task</a>
+                </div>
+            </div>
+        </div>
+
+
+        {% if tasks is empty %}
+            <p>No tasks found. Start by adding a new task!</p>
+        {% else %}
+            <div class="list-group">
+                {% for task in tasks %}
+                    <div class="list-group-item {% if task.status == 2 %}list-group-item-success{% endif %}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-1">{{ task.title }}</h5>
+                                {% if task.description %}
+                                    <p class="mb-1">{{ task.description }}</p>
+                                {% endif %}
+
+                                {% if task.dueDate %}
+                                    <small>Due: {{ task.dueDate|date('Y-m-d H:i') }}</small>
+                                {% endif %}
+
+                                <div class="mt-2">
+                                <span class="badge bg-{% if task.priority == 0 %}secondary{% elseif task.priority == 1 %}primary{% else %}danger{% endif %}">
+                                    {% if task.priority == 0 %}
+                                        Low
+                                    {% elseif task.priority == 1 %}
+                                        Medium
+                                    {% else %}
+                                        High
+                                    {% endif %}
+                                </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a href="{{ path('app_tasks_edit', {'id': task.id}) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <a href="{{ path('app_tasks_toggle', {'id': task.id}) }}" class="btn btn-sm btn-outline-{% if task.status %}secondary{% else %}success{% endif %}">
+                                    {% if task.status ==2  %}Mark as Incomplete{% else %}Mark as Complete{% endif %}
+                                </a>
+                                <a href="{{ path('app_tasks_delete', {'id': task.id}) }}" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </div>
+                        </div>
+
+                        {% if task.subtasks is defined and task.subtasks is not empty %}
+                            <div class="mt-3">
+                                <strong>Subtasks:</strong>
+                                <ul class="list-group mt-2">
+                                    {% for subtask in task.subtasks %}
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            {{ subtask.title }}
+                                            <div>
+                                            <span class="badge bg-{% if subtask.isCompleted %}success{% else %}secondary{% endif %} rounded-pill">
+                                                {% if subtask.isCompleted %}Completed{% else %}Pending{% endif %}
+                                            </span>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="mt-4 mb-4">
+                {{ knp_pagination_render(tasks) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
