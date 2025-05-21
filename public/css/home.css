@@ -30,7 +30,7 @@ h1 {
     font-size: 1.1rem;
 }
 
-.container {
+.home-container {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -176,7 +176,7 @@ h2 {
 }
 
 @media (max-width: 768px) {
-    .container {
+    .home-container {
         flex-direction: column;
         align-items: center;
     }
