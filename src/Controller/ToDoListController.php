@@ -44,7 +44,7 @@ final class ToDoListController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list/create', name: 'app_tasks_new')]
     public function create(
-        Request              $request
+        Request $request
     ): Response
     {
         $task = new TasksModel();
@@ -52,16 +52,12 @@ final class ToDoListController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // Example: Check for duplicate task titles
-            $existingTask = $this->tasksRepository->findOneBy(['title' => $task->getTitle()]);
-            if ($existingTask) {
-                $this->addFlash('error', 'A task with this title already exists.');
-            } else {
-                $this->entityManager->persist($task);
-                $this->entityManager->flush();
+            $event_id = $request->request->all()['task']['event_id'] ?? null;
+            $task->setEventId($event_id);;
+            $this->entityManager->persist($task);
+            $this->entityManager->flush();
 
-                return $this->redirectToRoute('web_tasks');
-            }
+            return $this->redirectToRoute('web_tasks');
         }
 
         return $this->render('to_do_list/create.html.twig', [
@@ -72,8 +68,8 @@ final class ToDoListController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list/edit/{id}', name: 'app_tasks_edit')]
     public function edit(
-        Request              $request,
-                             $id
+        Request $request,
+                $id
     ): Response
     {
         $task = $this->tasksRepository->find($id);
@@ -100,8 +96,8 @@ final class ToDoListController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list/toggle/{id}', name: 'app_tasks_toggle')]
     public function markAsComplete(
-        Request              $request,
-                             $id
+        Request $request,
+                $id
     ): Response
     {
         $task = $this->tasksRepository->find($id);
@@ -125,8 +121,8 @@ final class ToDoListController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route('/to-do-list/delete/{id}', name: 'app_tasks_delete')]
     public function delete(
-        Request              $request,
-                             $id
+        Request $request,
+                $id
     ): Response
     {
         $task = $this->tasksRepository->find($id);

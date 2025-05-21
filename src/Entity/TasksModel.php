@@ -32,6 +32,13 @@ class TasksModel
     #[ORM\Column]
     private ?int $priority = null;
 
+    #[ORM\ManyToOne(targetEntity: Events::class)]
+    #[ORM\JoinColumn(name: "event_id", referencedColumnName: "id", nullable: false)]
+    private ?Events $event = null;
+
+    #[ORM\Column]
+    private $event_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -108,4 +115,28 @@ class TasksModel
 
         return $this;
     }
+
+    public function getEventId(): ?int
+    {
+        return $this->event_id;
+    }
+
+    public function setEventId($event_id): static
+    {
+        $this->event_id = $event_id;
+
+        return $this;
+    }
+
+    public function getEvent(): ?Events
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Events $event): self
+    {
+        $this->event = $event;
+        return $this;
+    }
+
 }

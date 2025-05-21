@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Events;
 use App\Entity\TasksModel;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
@@ -12,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class TaskType extends AbstractType
 {
@@ -57,6 +59,12 @@ class TaskType extends AbstractType
                     'High' => 2,
                 ],
                 'label' => 'Priority',
+            ])
+            ->add('event', EntityType::class, [
+                'class' => Events::class,
+                'choice_label' => 'name',
+                'placeholder' => 'Select an Event',
+                'label' => 'Event',
             ]);
     }
 
