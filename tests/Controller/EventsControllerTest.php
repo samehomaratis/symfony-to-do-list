@@ -4,6 +4,7 @@ namespace App\Tests\Controller;
 
 use App\Controller\EventsController;
 use App\Repository\EventsRepository;
+use App\Tests\Services\TestAuthService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,4 +50,40 @@ class EventsControllerTest extends WebTestCase
 
         $this->assertInstanceOf(Response::class, $response);
     }
+
+    public function testCreateFormDisplaysAndSubmitsSuccessfully(): void
+    {
+        $client = static::createClient();
+
+        $container = static::getContainer();
+
+        // Simulate a logged-in user with ROLE_USER if needed
+        $myService = $container->get(TestAuthService::class);
+
+        $user = $myService->createUser();
+
+        // Log in the user
+        $client->loginUser($user);
+
+        // GET request to display form
+        $crawler = $client->request('GET', '/events/create');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('form');
+
+        // Fill and submit the form
+        $form = $crawler->filter('#event_submit')->form();
+
+        $form['event[name]'] = 'Test Event'; // adjust field names to your form
+        $form['event[event_date]'] = '2025-06-01'; // adjust as needed
+        $form['event[event_time]'] = '09:10'; // adjust as needed
+
+        $client->submit($form);
+
+        $this->assertResponseRedirects('/events');
+        $client->followRedirect();
+
+        $this->assertSelectorTextContains('body', 'Test Event');
+    }
+
 }
