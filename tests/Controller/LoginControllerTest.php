@@ -4,13 +4,17 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class LoginControllerTest extends WebTestCase
+class LoginControllerTest extends WebTestCase
 {
     public function testIndex(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/login');
 
-        self::assertResponseIsSuccessful();
+        $container = static::getContainer();
+
+        // Make the request
+        $crawler = $client->request('GET', '/login');
+
+        $this->assertResponseIsSuccessful();
     }
 }
