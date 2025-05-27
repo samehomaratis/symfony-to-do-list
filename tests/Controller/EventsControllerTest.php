@@ -131,5 +131,37 @@ class EventsControllerTest extends WebTestCase
         $this->assertSelectorTextContains('body', 'Test Event');
     }
 
-    
+    public function testDeleteSubmission(): void
+    {
+        $client = static::createClient();
+
+        $container = static::getContainer();
+
+        // Simulate a logged-in user with ROLE_USER if needed
+        $myService = $container->get(TestAuthService::class);
+
+        $user = $myService->createUser();
+
+        // Log in the user
+        $client->loginUser($user);
+
+        // Simulate a logged-in user with ROLE_USER if needed
+        $myService = $container->get(TestAuthService::class);
+
+        $user = $myService->createUser();
+        $eventsRepository = $container->get(EventsRepository::class);
+
+        $criteria = ['name' => 'Test Event'];
+        $data = ['event_date' => '2025-07-01', 'event_time' => '09:10'];
+        $event = $eventsRepository->updateOrCreate($criteria, $data);
+
+        // GET request to display form
+        $crawler = $client->request('GET', '/events/delete/' . $event->getId());
+
+        $this->assertResponseRedirects('/events');
+        $client->followRedirect();
+
+        $this->assertSelectorTextContains('body', 'Test Event');
+    }
+
 }
