@@ -15,7 +15,6 @@ use Doctrine\ORM\QueryBuilder;
 
 class EventsControllerTest extends WebTestCase
 {
-    private $entityManager;
     private $eventsRepository;
 
     protected function setUp(): void
