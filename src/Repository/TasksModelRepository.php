@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TasksModelRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry,
+    public function __construct(ManagerRegistry                $registry,
                                 private EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, TasksModel::class);
@@ -49,10 +49,24 @@ class TasksModelRepository extends ServiceEntityRepository
 
         if (!$model) {
             $model = new TasksModel();
+            foreach ($criteria as $field => $value) {
+                $field_parts = explode('_', $field);
+                $setter = 'set';
+                foreach ($field_parts as $part) {
+                    $setter .= ucfirst($part);
+                }
+                if (method_exists($model, $setter)) {
+                    $model->$setter($value);
+                }
+            }
         }
 
         foreach ($data as $field => $value) {
-            $setter = 'set' . ucfirst($field);
+            $field_parts = explode('_', $field);
+            $setter = 'set';
+            foreach ($field_parts as $part) {
+                $setter .= ucfirst($part);
+            }
             if (method_exists($model, $setter)) {
                 $model->$setter($value);
             }

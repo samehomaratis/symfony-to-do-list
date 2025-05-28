@@ -53,10 +53,12 @@ class ToDoListControllerTest extends WebTestCase
     private function generateEvent()
     {
         $container = static::getContainer();
+        $event_date = new \DateTime('2025-06-01');
+        $event_time = new \DateTime('09:10');
 
         $eventsRepository = $container->get(EventsRepository::class);
         $criteria = ['name' => 'Test Event'];
-        $data = ['event_date' => '2025-07-01', 'event_time' => '09:10'];
+        $data = ['event_date' => $event_date, 'event_time' => $event_time];
         return $eventsRepository->updateOrCreate($criteria, $data);
     }
 
@@ -79,9 +81,11 @@ class ToDoListControllerTest extends WebTestCase
 
         $repo = $container->get(TasksModelRepository::class);
         $criteria = ['title' => 'Test Task Title', 'user_id' => $user->getId()];
+        $due_date = new \DateTime('2025-06-01');
+
         $data = [
             'description' => 'Task description',
-            'event_date' => '2025-06-01',
+            'due_date' => $due_date,
             'status' => '0',
             'priority' => '0',
             'event_id' => $event->getId(),
@@ -120,42 +124,41 @@ class ToDoListControllerTest extends WebTestCase
 
     }
 
-//    public function testEditValidFormSubmission(): void
-//    {
-//        $client = static::createClient();
-//
-//        $container = static::getContainer();
-//
-//        // Simulate a logged-in user with ROLE_USER if needed
-//        $myService = $container->get(TestAuthService::class);
-//
-//        $user = $myService->createUser();
-//
-//        // Log in the user
-//        $client->loginUser($user);
-//
-//        // Simulate a logged-in user with ROLE_USER if needed
-//        $myService = $container->get(TestAuthService::class);
-//
-//        $user = $myService->createUser();
-//
-//        $event = $this->generateEvent();
-//
-//        $task = $this->generateTask($user, $event);
-//
-//        // GET request to display form
-//        $crawler = $client->request('GET', '/to-do-list/edit/' . $task->getId());
-//
-//        $this->assertResponseIsSuccessful();
-//
-//        $this->assertSelectorExists('form');
-//
-//        $form = $crawler->filter('#task_submit')->form();
-//
-//        $form = $this->generateForm($form, $user, $task);
-//
-//        $client->submit($form);
-//    }
+    public function testEditValidFormSubmission(): void
+    {
+        $client = static::createClient();
+
+        $container = static::getContainer();
+
+        // Simulate a logged-in user with ROLE_USER if needed
+        $myService = $container->get(TestAuthService::class);
+
+        $user = $myService->createUser();
+
+        // Log in the user
+        $client->loginUser($user);
+
+        // Simulate a logged-in user with ROLE_USER if needed
+        $myService = $container->get(TestAuthService::class);
+
+        $user = $myService->createUser();
+        $event = $this->generateEvent();
+
+        $task = $this->generateTask($user, $event);
+
+        // GET request to display form
+        $crawler = $client->request('GET', '/to-do-list/edit/' . $task->getId());
+
+        $this->assertResponseIsSuccessful();
+
+        $this->assertSelectorExists('form');
+
+        $form = $crawler->filter('#task_submit')->form();
+
+        $form = $this->generateForm($form, $user, $event);
+
+        $client->submit($form);
+    }
 
 //    public function testDeleteSubmission(): void
 //    {

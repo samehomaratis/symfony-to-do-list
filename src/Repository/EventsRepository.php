@@ -50,10 +50,24 @@ class EventsRepository extends ServiceEntityRepository
 
         if (!$model) {
             $model = new Events();
+            foreach ($criteria as $field => $value) {
+                $field_parts = explode('_', $field);
+                $setter = 'set';
+                foreach ($field_parts as $part) {
+                    $setter .= ucfirst($part);
+                }
+                if (method_exists($model, $setter)) {
+                    $model->$setter($value);
+                }
+            }
         }
 
         foreach ($data as $field => $value) {
-            $setter = 'set' . ucfirst($field);
+            $field_parts = explode('_', $field);
+            $setter = 'set';
+            foreach ($field_parts as $part) {
+                $setter .= ucfirst($part);
+            }
             if (method_exists($model, $setter)) {
                 $model->$setter($value);
             }

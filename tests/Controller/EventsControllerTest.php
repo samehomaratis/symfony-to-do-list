@@ -73,9 +73,12 @@ class EventsControllerTest extends WebTestCase
         // Fill and submit the form
         $form = $crawler->filter('#event_submit')->form();
 
+        $event_date = new \DateTime('2025-06-01');
+        $event_time = new \DateTime('09:10');
+
         $form['event[name]'] = 'Test Event'; // adjust field names to your form
-        $form['event[event_date]'] = '2025-06-01'; // adjust as needed
-        $form['event[event_time]'] = '09:10'; // adjust as needed
+        $form['event[event_date]'] = $event_date; // adjust as needed
+        $form['event[event_time]'] = $event_time; // adjust as needed
 
         $client->submit($form);
 
@@ -89,9 +92,12 @@ class EventsControllerTest extends WebTestCase
     {
         $container = static::getContainer();
 
+        $event_date = new \DateTime('2025-06-01');
+        $event_time = new \DateTime('09:10');
+
         $eventsRepository = $container->get(EventsRepository::class);
         $criteria = ['name' => 'Test Event'];
-        $data = ['event_date' => '2025-07-01', 'event_time' => '09:10'];
+        $data = ['event_date' => $event_date, 'event_time' => $event_time];
         return $eventsRepository->updateOrCreate($criteria, $data);
     }
 
@@ -125,9 +131,12 @@ class EventsControllerTest extends WebTestCase
 
         $form = $crawler->filter('#event_submit')->form();
 
+        $event_date = new \DateTime('2025-07-01');
+        $event_time = new \DateTime('09:10');
+
         $form['event[name]'] = 'Test Event'; // adjust field names to your form
-        $form['event[event_date]'] = '2025-07-01'; // adjust as needed
-        $form['event[event_time]'] = '09:35'; // adjust as needed
+        $form['event[event_date]'] = $event_date; // adjust as needed
+        $form['event[event_time]'] = $event_time; // adjust as needed
 
         $client->submit($form);
 
