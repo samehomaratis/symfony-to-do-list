@@ -52,7 +52,7 @@ final class ToDoListController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $event_id = $request->request->all()['task']['event_id'] ?? null;
+            $event_id = $request->request->all()['task']['event'] ?? null;
             $task->setEventId($event_id);;
             $this->entityManager->persist($task);
             $this->entityManager->flush();
