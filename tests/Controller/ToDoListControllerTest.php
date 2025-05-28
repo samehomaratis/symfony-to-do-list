@@ -3,6 +3,7 @@
 namespace App\Tests\Controller;
 
 use App\Controller\ToDoListController;
+use App\Repository\EventsRepository;
 use App\Repository\TasksModelRepository;
 use App\Tests\Services\TestAuthService;
 use Doctrine\ORM\Query;
@@ -49,6 +50,45 @@ class ToDoListControllerTest extends WebTestCase
         $this->assertInstanceOf(Response::class, $response);
     }
 
+    private function generateEvent()
+    {
+        $container = static::getContainer();
+
+        $eventsRepository = $container->get(EventsRepository::class);
+        $criteria = ['name' => 'Test Event'];
+        $data = ['event_date' => '2025-07-01', 'event_time' => '09:10'];
+        return $eventsRepository->updateOrCreate($criteria, $data);
+    }
+
+    private function generateForm($form, $user, $event)
+    {
+        $form['task[user_id]'] = $user->getId();
+        $form['task[title]'] = 'Task Title';
+        $form['task[description]'] = 'Task description';
+        $form['task[event_date]'] = '2025-06-01'; // adjust as needed
+        $form['task[status]'] = '0'; // adjust as needed
+        $form['task[priority]'] = '0'; // adjust as needed
+        $form['task[event_id ]'] = $event->getId();
+
+        return $form;
+    }
+
+    private function generateTask($user, $event)
+    {
+        $container = static::getContainer();
+
+        $repo = $container->get(TasksModelRepository::class);
+        $criteria = ['title' => 'Test Task Title', 'user_id' => $user->getId()];
+        $data = [
+            'description' => 'Task description',
+            'event_date' => '2025-06-01',
+            'status' => '0',
+            'priority' => '0',
+            'event_id' => $event->getId(),
+        ];
+        return $repo->updateOrCreate($criteria, $data);
+    }
+
     public function testCreateFormDisplaysAndSubmitsSuccessfully(): void
     {
         $client = static::createClient();
@@ -69,19 +109,19 @@ class ToDoListControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('form');
 
-        // Fill and submit the form
-        $form = $crawler->filter('#event_submit')->form();
+        $event = $this->generateEvent();
 
-        $form['event[name]'] = 'Test Event'; // adjust field names to your form
-        $form['event[event_date]'] = '2025-06-01'; // adjust as needed
-        $form['event[event_time]'] = '09:10'; // adjust as needed
+        // Fill and submit the form
+        $form = $crawler->filter('#task_submit')->form();
+
+        $form = $this->generateForm($form, $user, $event);
 
         $client->submit($form);
 
-        $this->assertResponseRedirects('/events');
+        $this->assertResponseRedirects('/to-do-list');
         $client->followRedirect();
 
-        $this->assertSelectorTextContains('body', 'Test Event');
+        $this->assertSelectorTextContains('body', 'Test Task');
     }
 
     public function testEditValidFormSubmission(): void
@@ -102,31 +142,28 @@ class ToDoListControllerTest extends WebTestCase
         $myService = $container->get(TestAuthService::class);
 
         $user = $myService->createUser();
-        $taskRepository = $container->get(TasksModelRepository::class);
 
-        $criteria = ['name' => 'Test Event'];
-        $data = ['event_date' => '2025-07-01', 'event_time' => '09:10'];
-        $event = $taskRepository->updateOrCreate($criteria, $data);
+        $event = $this->generateEvent();
+
+        $task = $this->generateTask($user, $event);
 
         // GET request to display form
-        $crawler = $client->request('GET', '/to-do-list/edit/' . $event->getId());
+        $crawler = $client->request('GET', '/to-do-list/edit/' . $task->getId());
 
         $this->assertResponseIsSuccessful();
 
         $this->assertSelectorExists('form');
 
-        $form = $crawler->filter('#event_submit')->form();
+        $form = $crawler->filter('#task_submit')->form();
 
-        $form['event[name]'] = 'Test Event'; // adjust field names to your form
-        $form['event[event_date]'] = '2025-07-01'; // adjust as needed
-        $form['event[event_time]'] = '09:35'; // adjust as needed
+        $form = $this->generateForm($form, $user, $task);
 
         $client->submit($form);
 
-        $this->assertResponseRedirects('/events');
+        $this->assertResponseRedirects('/to-do-list');
         $client->followRedirect();
 
-        $this->assertSelectorTextContains('body', 'Test Event');
+        $this->assertSelectorTextContains('body', 'Test Task');
     }
 
     public function testDeleteSubmission(): void
@@ -147,18 +184,17 @@ class ToDoListControllerTest extends WebTestCase
         $myService = $container->get(TestAuthService::class);
 
         $user = $myService->createUser();
-        $taskRepository = $container->get(TasksModelRepository::class);
 
-        $criteria = ['name' => 'Test Event'];
-        $data = ['event_date' => '2025-07-01', 'event_time' => '09:10'];
-        $event = $taskRepository->updateOrCreate($criteria, $data);
+        $event = $this->generateEvent();
+
+        $task = $this->generateTask($user, $event);
 
         // GET request to display form
-        $crawler = $client->request('GET', '/to-do-list/delete/' . $event->getId());
+        $crawler = $client->request('GET', '/to-do-list/delete/' . $task->getId());
 
-        $this->assertResponseRedirects('/events');
+        $this->assertResponseRedirects('/to-do-list');
         $client->followRedirect();
 
-        $this->assertSelectorTextContains('body', 'Test Event');
+        $this->assertSelectorTextContains('body', 'Test Task');
     }
 }

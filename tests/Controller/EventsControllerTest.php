@@ -85,6 +85,16 @@ class EventsControllerTest extends WebTestCase
         $this->assertSelectorTextContains('body', 'Test Event');
     }
 
+    private function generateEvent()
+    {
+        $container = static::getContainer();
+
+        $eventsRepository = $container->get(EventsRepository::class);
+        $criteria = ['name' => 'Test Event'];
+        $data = ['event_date' => '2025-07-01', 'event_time' => '09:10'];
+        return $eventsRepository->updateOrCreate($criteria, $data);
+    }
+
     public function testEditValidFormSubmission(): void
     {
         $client = static::createClient();
@@ -103,11 +113,8 @@ class EventsControllerTest extends WebTestCase
         $myService = $container->get(TestAuthService::class);
 
         $user = $myService->createUser();
-        $eventsRepository = $container->get(EventsRepository::class);
 
-        $criteria = ['name' => 'Test Event'];
-        $data = ['event_date' => '2025-07-01', 'event_time' => '09:10'];
-        $event = $eventsRepository->updateOrCreate($criteria, $data);
+        $event = $this->generateEvent();
 
         // GET request to display form
         $crawler = $client->request('GET', '/events/edit/' . $event->getId());
@@ -148,11 +155,8 @@ class EventsControllerTest extends WebTestCase
         $myService = $container->get(TestAuthService::class);
 
         $user = $myService->createUser();
-        $eventsRepository = $container->get(EventsRepository::class);
 
-        $criteria = ['name' => 'Test Event'];
-        $data = ['event_date' => '2025-07-01', 'event_time' => '09:10'];
-        $event = $eventsRepository->updateOrCreate($criteria, $data);
+        $event = $this->generateEvent();
 
         // GET request to display form
         $crawler = $client->request('GET', '/events/delete/' . $event->getId());

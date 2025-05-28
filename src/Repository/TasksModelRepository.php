@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\TasksModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -11,7 +12,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TasksModelRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry,
+                                private EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, TasksModel::class);
     }
@@ -40,4 +42,26 @@ class TasksModelRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function updateOrCreate(array $criteria, array $data): TasksModel
+    {
+        $model = $this->findOneBy($criteria);
+
+        if (!$model) {
+            $model = new TasksModel();
+        }
+
+        foreach ($data as $field => $value) {
+            $setter = 'set' . ucfirst($field);
+            if (method_exists($model, $setter)) {
+                $model->$setter($value);
+            }
+        }
+
+        $this->entityManager->persist($model);
+        $this->entityManager->flush();
+
+        return $model;
+    }
+
 }
