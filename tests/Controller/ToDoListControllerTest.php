@@ -160,35 +160,33 @@ class ToDoListControllerTest extends WebTestCase
         $client->submit($form);
     }
 
-//    public function testDeleteSubmission(): void
-//    {
-//        $client = static::createClient();
-//
-//        $container = static::getContainer();
-//
-//        // Simulate a logged-in user with ROLE_USER if needed
-//        $myService = $container->get(TestAuthService::class);
-//
-//        $user = $myService->createUser();
-//
-//        // Log in the user
-//        $client->loginUser($user);
-//
-//        // Simulate a logged-in user with ROLE_USER if needed
-//        $myService = $container->get(TestAuthService::class);
-//
-//        $user = $myService->createUser();
-//
-//        $event = $this->generateEvent();
-//
-//        $task = $this->generateTask($user, $event);
-//
-//        // GET request to display form
-//        $crawler = $client->request('GET', '/to-do-list/delete/' . $task->getId());
-//
-//        $this->assertResponseRedirects('/to-do-list');
-//        $client->followRedirect();
-//
-//        $this->assertSelectorTextContains('body', 'Test Task');
-//    }
+    public function testDeleteSubmission(): void
+    {
+        $client = static::createClient();
+
+        $container = static::getContainer();
+
+        // Simulate a logged-in user with ROLE_USER if needed
+        $myService = $container->get(TestAuthService::class);
+
+        $user = $myService->createUser();
+
+        // Log in the user
+        $client->loginUser($user);
+
+        // Simulate a logged-in user with ROLE_USER if needed
+        $myService = $container->get(TestAuthService::class);
+
+        $user = $myService->createUser();
+
+        $event = $this->generateEvent();
+
+        $task = $this->generateTask($user, $event);
+
+        // GET request to display form
+        $crawler = $client->request('GET', '/to-do-list/delete/' . $task->getId());
+
+        $this->assertResponseRedirects('/to-do-list');
+        $client->followRedirect();
+    }
 }
