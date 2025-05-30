@@ -1,43 +1,56 @@
 security:
-    password_hashers:
-        App\Entity\UserModal:
-            algorithm: auto
+  password_hashers:
+    App\Entity\UserModal:
+      algorithm: auto
 
-    providers:
-        app_user_provider:
-            entity:
-                class: App\Entity\UserModal
-                property: email
+  providers:
+    app_user_provider:
+      entity:
+        class: App\Entity\UserModal
+        property: email
 
-    firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
 
-        main:
-            lazy: true
-            provider: app_user_provider
-            form_login:
-                login_path: login
-                check_path: login
-            logout:
-                path: logout
-                target: /
+    api:
+      pattern: ^/api/
+      stateless: true
+      jwt: ~
+      provider: app_user_provider
+      json_login:
+        check_path: /api/login
+        username_path: email
+        password_path: password
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+        failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-            security: true
+    main:
+      lazy: true
+      provider: app_user_provider
+      form_login:
+        login_path: login
+        check_path: login
+      logout:
+        path: logout
+        target: /
 
-            custom_authenticator: App\Security\LoginFormAuthenticator
-            entry_point: App\Security\LoginFormAuthenticator
+      custom_authenticator: App\Security\LoginFormAuthenticator
+      entry_point: App\Security\LoginFormAuthenticator
 
-            remember_me:
-                secret: '%kernel.secret%'
-                lifetime: 604800
-                path: /
-                # by default, the feature is enabled by checking a checkbox in the
-                # login form, uncomment the following line to always enable it.
-                #always_remember_me: true
+      remember_me:
+        secret: '%kernel.secret%'
+        lifetime: 604800
+        path: /
+        # by default, the feature is enabled by checking a checkbox in the
+        # login form, uncomment the following line to always enable it.
+        #always_remember_me: true
 
-    access_control:
-        - { path: ^/register, roles: PUBLIC_ACCESS }
-        - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/, roles: ROLE_USER }
+  access_control:
+    - { path: ^/api/login, roles: PUBLIC_ACCESS }
+    - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/register, roles: PUBLIC_ACCESS }
+    - { path: ^/login, roles: PUBLIC_ACCESS }
+    - { path: ^/, roles: ROLE_USER }
+

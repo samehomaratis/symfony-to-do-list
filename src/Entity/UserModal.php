@@ -81,6 +81,7 @@ class UserModal implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-        return '';
+        return $this->email; // or username if you're using that
     }
+
 }
