@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="17de4b8e-fe91-4298-ae12-f5f2fe52c837" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/DTO/EventDTO.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/API/EventsApiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/API/EventsApiController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -254,7 +256,7 @@
       <workItem from="1748502365542" duration="4962000" />
       <workItem from="1748507688073" duration="23621000" />
       <workItem from="1748592070798" duration="14935000" />
-      <workItem from="1748848698045" duration="996000" />
+      <workItem from="1748848698045" duration="2044000" />
     </task>
     <servers />
   </component>

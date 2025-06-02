@@ -2,6 +2,7 @@
 
 namespace App\Controller\API;
 
+use App\DTO\EventDTO;
 use App\Entity\Events;
 use App\Form\EventType;
 use App\Repository\EventsRepository;
@@ -36,10 +37,12 @@ class EventsApiController extends AbstractController
             10
         );
 
-        $data = $this->serializer->serialize($pagination->getItems(), 'json');
+        $items = array_map(function ($event) {
+            return (new EventDTO($event))->toArray();
+        }, $pagination->getItems());
 
         return new JsonResponse([
-            'items' => json_decode($data),
+            'items' => $items,
             'currentPage' => $pagination->getCurrentPageNumber(),
             'totalItems' => $pagination->getTotalItemCount(),
         ]);
