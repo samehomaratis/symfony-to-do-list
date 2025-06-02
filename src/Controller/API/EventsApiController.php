@@ -21,9 +21,11 @@ class EventsApiController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private EventsRepository $eventsRepository,
-        private SerializerInterface $serializer
-    ) {}
+        private EventsRepository       $eventsRepository,
+        private SerializerInterface    $serializer
+    )
+    {
+    }
 
     #[IsGranted('ROLE_USER')]
     #[Route('', name: 'api_events_index', methods: ['GET'])]
@@ -51,20 +53,24 @@ class EventsApiController extends AbstractController
     #[Route('', name: 'api_events_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
+        $data = json_decode($request->getContent(), true);
         $model = new Events();
-        $form = $this->createForm(EventType::class, $model);
-        $form->submit(json_decode($request->getContent(), true));
+        $form = $this->createForm(EventType::class, $model, [
+            'csrf_protection' => false,
+        ]);
+        $form->submit($data);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($model);
             $this->entityManager->flush();
 
-            $data = $this->serializer->serialize($model, 'json');
-            return new JsonResponse(json_decode($data), JsonResponse::HTTP_CREATED);
+            $data = (new EventDTO($model))->toArray();
+
+            return new JsonResponse($data, JsonResponse::HTTP_CREATED);
         }
 
         return new JsonResponse([
-            'errors' => (string) $form->getErrors(true, false)
+            'errors' => (string)$form->getErrors(true, false)
         ], JsonResponse::HTTP_BAD_REQUEST);
     }
 
@@ -77,8 +83,8 @@ class EventsApiController extends AbstractController
             return new JsonResponse(['error' => 'Event not found'], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $data = $this->serializer->serialize($model, 'json');
-        return new JsonResponse(json_decode($data));
+        $data = (new EventDTO($model))->toArray();
+        return new JsonResponse($data);
     }
 
     #[Route('/{id}', name: 'api_events_edit', methods: ['PUT', 'PATCH'])]
@@ -90,18 +96,21 @@ class EventsApiController extends AbstractController
             return new JsonResponse(['error' => 'Event not found'], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $form = $this->createForm(EventType::class, $model);
-        $form->submit(json_decode($request->getContent(), true));
+        $form = $this->createForm(EventType::class, $model, [
+            'csrf_protection' => false,
+        ]);
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            $data = $this->serializer->serialize($model, 'json');
-            return new JsonResponse(json_decode($data));
+            $data = (new EventDTO($model))->toArray();
+            return new JsonResponse($data);
         }
 
         return new JsonResponse([
-            'errors' => (string) $form->getErrors(true, false)
+            'errors' => (string)$form->getErrors(true, false)
         ], JsonResponse::HTTP_BAD_REQUEST);
     }
 
@@ -117,6 +126,8 @@ class EventsApiController extends AbstractController
         $this->entityManager->remove($model);
         $this->entityManager->flush();
 
-        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+        return new JsonResponse([
+            'message' => 'Event deleted successfully'
+        ]);
     }
 }
