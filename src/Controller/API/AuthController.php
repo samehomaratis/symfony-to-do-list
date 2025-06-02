@@ -74,7 +74,7 @@ class AuthController extends AbstractController
         }
 
         return new JsonResponse([
-            'errors' => (string)$form->getErrors(true, false)
+            'errors' => $form->getErrors(true)->__toString()
         ], JsonResponse::HTTP_BAD_REQUEST);
     }
 }

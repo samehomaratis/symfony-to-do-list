@@ -6,9 +6,12 @@ use App\Repository\UserModalRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Table(name: 'users')]
 #[ORM\Entity(repositoryClass: UserModalRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'This email is already registered.')]
 class UserModal implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -16,12 +19,16 @@ class UserModal implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: "Name is required.")]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotBlank(message: "Email is required.")]
+    #[Assert\Email]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
+    #[Assert\NotBlank(message: "Password is required.")]
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
