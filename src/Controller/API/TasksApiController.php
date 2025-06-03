@@ -5,6 +5,7 @@ namespace App\Controller\API;
 use App\DTO\TaskDTO;
 use App\Entity\TasksModel;
 use App\Form\TaskTypeForAPI;
+use App\Repository\EventsRepository;
 use App\Repository\TasksModelRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -19,6 +20,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class TasksApiController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $entityManager,
+                                private EventsRepository       $eventsRepository,
                                 private TasksModelRepository   $repository)
     {
     }
@@ -96,6 +98,15 @@ class TasksApiController extends AbstractController
         ]);
 
         $data = json_decode($request->getContent(), true);
+
+        $event_id = $data['event_id'] ?? null;
+        if ($event_id) {
+            $event = $this->eventsRepository->find($event_id);
+            if (!$event) {
+                return new JsonResponse(['error' => 'Event not found'], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+            }
+        }
+
         $form->submit($data);
 
         if ($form->isSubmitted() && $form->isValid()) {
