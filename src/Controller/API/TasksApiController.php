@@ -3,8 +3,8 @@
 namespace App\Controller\API;
 
 use App\DTO\TaskDTO;
-use App\Entity\Events;
-use App\Form\EventType;
+use App\Entity\TasksModel;
+use App\Form\TaskTypeForAPI;
 use App\Repository\TasksModelRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -12,18 +12,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/api/tasks', name: 'api_tasks_')]
 class TasksApiController extends AbstractController
 {
-    public function __construct(
-        private EntityManagerInterface $entityManager,
-        private TasksModelRepository   $repository,
-        private SerializerInterface    $serializer
-    )
+    public function __construct(private EntityManagerInterface $entityManager,
+                                private TasksModelRepository   $repository)
     {
     }
 
@@ -53,8 +49,8 @@ class TasksApiController extends AbstractController
     public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $model = new Events();
-        $form = $this->createForm(EventType::class, $model, [
+        $model = new TasksModel();
+        $form = $this->createForm(TaskTypeForAPI::class, $model, [
             'csrf_protection' => false,
         ]);
         $form->submit($data);
@@ -95,9 +91,10 @@ class TasksApiController extends AbstractController
             return new JsonResponse(['error' => 'Task not found'], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $form = $this->createForm(EventType::class, $model, [
+        $form = $this->createForm(TaskTypeForAPI::class, $model, [
             'csrf_protection' => false,
         ]);
+
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
 

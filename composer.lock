@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a7902bc9e17c2565e68c471765b992b",
+    "content-hash": "6a9177f6abdb33d6699db85b7bf7cf30",
     "packages": [
         {
             "name": "composer/semver",
@@ -3129,16 +3129,16 @@
         },
         {
             "name": "symfony/doctrine-bridge",
-            "version": "v7.2.6",
+            "version": "v7.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/doctrine-bridge.git",
-                "reference": "d030ea0d45746bf58d7905402bd45e9c35d412dd"
+                "reference": "912975cf16f0ca89fdc22f7accba6f8496b3e6ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/doctrine-bridge/zipball/d030ea0d45746bf58d7905402bd45e9c35d412dd",
-                "reference": "d030ea0d45746bf58d7905402bd45e9c35d412dd",
+                "url": "https://api.github.com/repos/symfony/doctrine-bridge/zipball/912975cf16f0ca89fdc22f7accba6f8496b3e6ff",
+                "reference": "912975cf16f0ca89fdc22f7accba6f8496b3e6ff",
                 "shasum": ""
             },
             "require": {
@@ -3218,7 +3218,7 @@
             "description": "Provides integration for Doctrine with various Symfony components",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/doctrine-bridge/tree/v7.2.6"
+                "source": "https://github.com/symfony/doctrine-bridge/tree/v7.2.7"
             },
             "funding": [
                 {
@@ -3234,7 +3234,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-27T13:34:41+00:00"
+            "time": "2025-05-10T11:58:55+00:00"
         },
         {
             "name": "symfony/doctrine-messenger",
