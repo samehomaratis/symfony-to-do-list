@@ -16,13 +16,19 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AuthController extends AbstractController
 {
+
+    public function __construct(private EntityManagerInterface $entityManager)
+    {
+    }
+
     #[Route('/api/login', name: 'api_login', methods: ['POST'])]
     public function login(
-        Request $request,
-        UserModalRepository $userRepository,
+        Request                     $request,
+        UserModalRepository         $userRepository,
         UserPasswordHasherInterface $passwordHasher,
-        JWTTokenManagerInterface $jwtManager
-    ): JsonResponse {
+        JWTTokenManagerInterface    $jwtManager
+    ): JsonResponse
+    {
         $data = json_decode($request->getContent(), true);
 
         $email = $data['email'] ?? null;
@@ -44,13 +50,12 @@ class AuthController extends AbstractController
     }
 
     #[Route('/api/register', name: 'api_register', methods: ['POST'])]
-    public function register(Request $request,
+    public function register(Request                     $request,
                              UserPasswordHasherInterface $passwordHasher,
-                             JWTTokenManagerInterface $jwtManager,
-                             EntityManagerInterface $em): Response
+                             JWTTokenManagerInterface    $jwtManager): Response
     {
         $data = json_decode($request->getContent(), true);
-        if (!$data || !isset($data['email'], $data['name'] , $data['password'])) {
+        if (!$data || !isset($data['email'], $data['name'], $data['password'])) {
             return new JsonResponse(['error' => 'Name, email and password are required'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
@@ -65,8 +70,8 @@ class AuthController extends AbstractController
             $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($hashedPassword);
 
-            $em->persist($user);
-            $em->flush();
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
 
             $token = $jwtManager->create($user);
 

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\UserModal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -11,7 +12,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserModalRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry,
+                                private EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, UserModal::class);
     }
@@ -40,4 +42,40 @@ class UserModalRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function updateOrCreate(array $criteria, array $data): UserModal
+    {
+        $model = $this->findOneBy($criteria);
+
+        if (!$model) {
+            $model = new UserModal();
+            foreach ($criteria as $field => $value) {
+                $field_parts = explode('_', $field);
+                $setter = 'set';
+                foreach ($field_parts as $part) {
+                    $setter .= ucfirst($part);
+                }
+                if (method_exists($model, $setter)) {
+                    $model->$setter($value);
+                }
+            }
+        }
+
+        foreach ($data as $field => $value) {
+            $field_parts = explode('_', $field);
+            $setter = 'set';
+            foreach ($field_parts as $part) {
+                $setter .= ucfirst($part);
+            }
+            if (method_exists($model, $setter)) {
+                $model->$setter($value);
+            }
+        }
+
+        $this->entityManager->persist($model);
+        $this->entityManager->flush();
+
+        return $model;
+    }
+
 }

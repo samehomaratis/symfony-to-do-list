@@ -43,7 +43,7 @@ class TasksModelRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    public function updateOrCreate(array $criteria, array $data): TasksModel
+    public function updateOrCreate(array $criteria, array $data = []): TasksModel
     {
         $model = $this->findOneBy($criteria);
 
