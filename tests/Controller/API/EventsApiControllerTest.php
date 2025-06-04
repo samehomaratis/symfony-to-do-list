@@ -6,7 +6,6 @@ use App\Repository\EventsRepository;
 use App\Tests\Services\TestAuthService;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
-use App\Entity\Events;
 
 class EventsApiControllerTest extends WebTestCase
 {
