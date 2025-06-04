@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="17de4b8e-fe91-4298-ae12-f5f2fe52c837" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/tests/Controller/API/AuthControllerTest.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/API/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/API/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/TasksModelRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/TasksModelRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/UserModalRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/UserModalRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Controller/API/EventsApiControllerTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Controller/API/EventsApiControllerTest.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -260,7 +257,7 @@
       <workItem from="1748592070798" duration="14935000" />
       <workItem from="1748848698045" duration="24851000" />
       <workItem from="1748935225810" duration="25455000" />
-      <workItem from="1749021555931" duration="12832000" />
+      <workItem from="1749021555931" duration="22116000" />
     </task>
     <servers />
   </component>
