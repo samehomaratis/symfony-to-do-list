@@ -65,14 +65,19 @@ class TasksApiControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $container = static::getContainer();
-        $this->userLogin($container, $client);
+        $user = $this->userLogin($container, $client);
+        $event = $this->generateEvent();
 
         $client->request('POST', '/api/tasks', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'title' => 'Sample Task',
             'description' => 'This is a test task',
-            'event_id' => 1, // replace with a real event ID or mock it
-            // other required fields...
+            'event_id' => $event->getId(), // replace with a real event ID or mock it
+            'user_id' => $user->getId(), // ensure the user ID is set
+            'due_date' => '2025-06-01 10:00:00',
+            'status' => 0, // adjust as needed
+            'priority' => 0, // adjust as needed
         ]));
+
 
         $this->assertEquals(Response::HTTP_CREATED, $client->getResponse()->getStatusCode());
         $data = json_decode($client->getResponse()->getContent(), true);
@@ -110,7 +115,12 @@ class TasksApiControllerTest extends WebTestCase
 
         $client->request('PUT', '/api/tasks/' . $task->getId(), [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'title' => 'Updated Task Title',
-            // 'event_id' => 1 // optionally include and validate
+            'description' => 'This is a test task',
+            'event_id' => $event->getId(), // replace with a real event ID or mock it
+            'user_id' => $user->getId(), // ensure the user ID is set
+            'due_date' => '2025-06-01 10:00:00',
+            'status' => 0, // adjust as needed
+            'priority' => 0, // adjust as needed
         ]));
 
         $response = $client->getResponse();
